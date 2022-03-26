@@ -58,4 +58,8 @@ public class CartController {
         System.out.println("Hellos world");
     }
 
+    public void checkPullRequest(){
+        System.out.println("Check pull request");
+    }
+
 }
