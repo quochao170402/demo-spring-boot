@@ -54,5 +54,14 @@ public class CartController {
         return true;
     }
 
+    @GetMapping(path = "/checkout")
+    public boolean checkout(HttpSession session){
+        Map<Long,Product> cart = (Map<Long, Product>) session.getAttribute("cart");
+        if (cart==null || cart.isEmpty()) return false;
 
+        for(Product product: cart.values()){
+            System.out.println(product);
+        }
+        return true;
+    }
 }
