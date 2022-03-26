@@ -70,8 +70,4 @@ public class ProductController {
             @RequestParam(required = false, defaultValue = "10") int pageSize) {
         return productService.findProductsWithPaginationAndSorting(field, currentPage, pageSize);
     }
-
-    public void testDto(){
-
-    }
 }

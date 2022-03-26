@@ -56,9 +56,4 @@ public class StudentController {
         fileOutputStream.close();
         return true;
     }
-
-    public void testCommit(){
-        System.out.println("commit");
-    }
-
 }
