@@ -57,5 +57,8 @@ public class StudentController {
         return true;
     }
 
+    public void testCommit(){
+        System.out.println("commit");
+    }
 
 }

@@ -53,4 +53,9 @@ public class CartController {
         session.setAttribute("cart", cart);
         return true;
     }
+
+    public void checkoutCart(){
+        System.out.println("Hellos world");
+    }
+
 }
