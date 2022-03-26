@@ -57,9 +57,4 @@ public class CartController {
     public void checkoutCart(){
         System.out.println("Hellos world");
     }
-
-    public void checkPullRequest(){
-        System.out.println("Check pull request");
-    }
-
 }
