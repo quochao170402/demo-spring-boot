@@ -54,7 +54,5 @@ public class CartController {
         return true;
     }
 
-    public void checkoutCart(){
-        System.out.println("Hellos world");
-    }
+
 }
