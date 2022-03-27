@@ -1,15 +1,15 @@
 package com.quochao.demo.dtos;
 
-import java.time.LocalDate;
+import java.io.Serializable;
 
-public class CreationStudentDto {
+public class CreationStudentDTO implements Serializable {
     private String name;
     private String email;
 
-    public CreationStudentDto() {
+    public CreationStudentDTO() {
     }
 
-    public CreationStudentDto(String name, String email) {
+    public CreationStudentDTO(String name, String email) {
         this.name = name;
         this.email = email;
     }

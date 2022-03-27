@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/v1/product")
+@RequestMapping(path = "/api/v1/products")
 public class ProductController {
 
     private final ProductService productService;

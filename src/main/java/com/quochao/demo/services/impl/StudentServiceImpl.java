@@ -1,6 +1,6 @@
 package com.quochao.demo.services.impl;
 
-import com.quochao.demo.dtos.CreationStudentDto;
+import com.quochao.demo.dtos.CreationStudentDTO;
 import com.quochao.demo.entities.Student;
 import com.quochao.demo.repositories.StudentRepository;
 import com.quochao.demo.services.StudentService;
@@ -72,13 +72,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     //    Convert entities to dtos
-    public CreationStudentDto convertStudentToDto(Student student) {
-        CreationStudentDto creationStudentDto = new CreationStudentDto();
-        creationStudentDto = modelMapper.map(student, CreationStudentDto.class);
+    public CreationStudentDTO convertStudentToDto(Student student) {
+        CreationStudentDTO creationStudentDto = new CreationStudentDTO();
+        creationStudentDto = modelMapper.map(student, CreationStudentDTO.class);
         return creationStudentDto;
     }
 
-    public Student convertStudentDtoToStudent(CreationStudentDto dto) {
+    public Student convertStudentDtoToStudent(CreationStudentDTO dto) {
         return modelMapper.map(dto, Student.class);
     }
 }

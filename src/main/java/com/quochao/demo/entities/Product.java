@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table
-public class Product {
+public class Product implements Serializable {
 
     @Id
 //    @SequenceGenerator(
@@ -28,6 +30,9 @@ public class Product {
     @Transient
     @JsonIgnore
     private MultipartFile file;
+
+    @OneToMany(mappedBy = "cart")
+    private List<CartItem> cartItems;
 
     public Product() {
     }
