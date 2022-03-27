@@ -12,10 +12,7 @@ import com.quochao.demo.services.CartService;
 import com.quochao.demo.services.ProductService;
 import com.quochao.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -73,6 +70,53 @@ public class CartController {
         cart.put(id, cartItemDTO);
         session.setAttribute("cart", cart);
         return cartItemDTO;
+    }
+
+    @PutMapping(path = "/{id}")
+    public CartItemDTO updateCartItem(
+            HttpSession session,
+            @PathVariable Long id,
+            @RequestParam(name = "quantity", required = false) Integer quantity) {
+        if (quantity == null || quantity < 0)
+            throw new IllegalStateException("Quantity invalid");
+        ;
+
+        Map<Long, CartItemDTO> cart = (Map<Long, CartItemDTO>) session.getAttribute("cart");
+        if (cart == null) {
+            throw new IllegalStateException("Your cart not exists");
+        }
+
+        if (cart.containsKey(id)) {
+            CartItemDTO cartItemDTO = cart.get(id);
+            if (quantity == 0) {
+                cart.remove(id);
+                return null;
+            } else {
+                cartItemDTO.setQuantity(quantity);
+                cart.put(id, cartItemDTO);
+                return cartItemDTO;
+            }
+        }
+        session.setAttribute("cart", cart);
+        throw new IllegalStateException("Product without your cart");
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public boolean deleteCartItem(
+            HttpSession session,
+            @PathVariable Long id) {
+
+        Map<Long, CartItemDTO> cart = (Map<Long, CartItemDTO>) session.getAttribute("cart");
+        if (cart == null) {
+            throw new IllegalStateException("Your cart not exists");
+        }
+
+        if (!cart.containsKey(id))
+            throw new IllegalStateException("Not found product in cart");
+        else cart.remove(id);
+
+        session.setAttribute("cart", cart);
+        return true;
     }
 
     @GetMapping(path = "/checkout")
