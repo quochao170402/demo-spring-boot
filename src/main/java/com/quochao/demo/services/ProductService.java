@@ -26,4 +26,6 @@ public interface ProductService {
     Page<Product> findProductsWithPaginationAndSorting(String field, int currentPage, int pageSize);
 
     Product findById(Long id);
+
+    List<Product> findAllByKeyWord(String keyword);
 }

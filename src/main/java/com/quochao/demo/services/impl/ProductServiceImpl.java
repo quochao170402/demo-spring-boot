@@ -116,6 +116,11 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(id).orElse(null);
     }
 
+    @Override
+    public List<Product> findAllByKeyWord(String keyword) {
+        return productRepository.findAllByName(keyword);
+    }
+
 
     private String uploadFileToCloud(MultipartFile file, String name) {
         try {

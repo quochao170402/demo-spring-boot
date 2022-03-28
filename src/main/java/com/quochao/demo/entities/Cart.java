@@ -1,5 +1,7 @@
 package com.quochao.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -18,6 +20,7 @@ public class Cart implements Serializable {
     @Column(name = "total_price")
     private Double totalPrice;
     @Column(name = "created_date")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate createdDate;
 
     @OneToMany(mappedBy = "product")

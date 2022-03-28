@@ -1,7 +1,7 @@
 package com.quochao.demo.controllers;
 
-import com.quochao.demo.dtos.CartDTO;
 import com.quochao.demo.dtos.CartItemDTO;
+import com.quochao.demo.dtos.ResponseObjectDTO;
 import com.quochao.demo.entities.Cart;
 import com.quochao.demo.entities.CartItem;
 import com.quochao.demo.entities.Product;
@@ -12,6 +12,8 @@ import com.quochao.demo.services.CartService;
 import com.quochao.demo.services.ProductService;
 import com.quochao.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -39,23 +41,26 @@ public class CartController {
     }
 
     @GetMapping
-    public List<CartItemDTO> cart(HttpSession session) {
+    public ResponseEntity<ResponseObjectDTO> cart(HttpSession session) {
         Map<Long, CartItemDTO> cart = (Map<Long, CartItemDTO>) session.getAttribute("cart");
-        if (cart == null) cart = new HashMap<>();
-        return new ArrayList<>(cart.values());
+        return (cart == null) ?
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObjectDTO("NOT FOUND", "Not found cart", null)):
+                ResponseEntity.status(HttpStatus.OK).body(new ResponseObjectDTO("OK", "All items in cart",
+                        new ArrayList<>(cart.values())));
     }
 
     @GetMapping(path = "/{id}")
-    public CartItemDTO addToCart(HttpSession session, @PathVariable Long id) {
+    public ResponseEntity<ResponseObjectDTO> addToCart(HttpSession session, @PathVariable Long id) {
         Map<Long, CartItemDTO> cart = (Map<Long, CartItemDTO>) session.getAttribute("cart");
         if (cart == null) {
             cart = new HashMap<>();
         }
 
         Product product = productService.findById(id);
-        if (product == null) throw new IllegalStateException("Not found product with id " + id);
+        if (product == null) return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ResponseObjectDTO("NOT FOUND", "Not found product with id " + id, null));
 
-        CartItemDTO cartItemDTO = null;
+        CartItemDTO cartItemDTO;
         if (cart.containsKey(product.getId())) {
             cartItemDTO = cart.get(id);
             cartItemDTO.setQuantity(cartItemDTO.getQuantity() + 1);
@@ -67,63 +72,73 @@ public class CartController {
             cartItemDTO.setQuantity(1);
             cartItemDTO.setTotalPrice(product.getPrice());
         }
+
         cart.put(id, cartItemDTO);
         session.setAttribute("cart", cart);
-        return cartItemDTO;
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObjectDTO("ADDED", "Added items to cart", cartItemDTO));
     }
 
     @PutMapping(path = "/{id}")
-    public CartItemDTO updateCartItem(
+    public ResponseEntity<ResponseObjectDTO> updateCartItem(
             HttpSession session,
             @PathVariable Long id,
             @RequestParam(name = "quantity", required = false) Integer quantity) {
         if (quantity == null || quantity < 0)
-            throw new IllegalStateException("Quantity invalid");
-        ;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObjectDTO("QUANTITY INVALID", "Quantity of cart items must positive", null));
 
         Map<Long, CartItemDTO> cart = (Map<Long, CartItemDTO>) session.getAttribute("cart");
-        if (cart == null) {
-            throw new IllegalStateException("Your cart not exists");
-        }
+        if (cart == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObjectDTO("NOT FOUND", "Not found cart", null));
 
         if (cart.containsKey(id)) {
             CartItemDTO cartItemDTO = cart.get(id);
             if (quantity == 0) {
                 cart.remove(id);
-                return null;
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObjectDTO("DELETED", "Deleted items", null));
             } else {
                 cartItemDTO.setQuantity(quantity);
                 cart.put(id, cartItemDTO);
-                return cartItemDTO;
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObjectDTO("UPDATED", "Updated quantity for cart items", cartItemDTO));
             }
         }
         session.setAttribute("cart", cart);
-        throw new IllegalStateException("Product without your cart");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ResponseObjectDTO("NOT FOUND", "Not found item with id " + id + " in your cart", null));
     }
 
     @DeleteMapping(path = "/{id}")
-    public boolean deleteCartItem(
+    public ResponseEntity<ResponseObjectDTO> deleteCartItem(
             HttpSession session,
             @PathVariable Long id) {
 
         Map<Long, CartItemDTO> cart = (Map<Long, CartItemDTO>) session.getAttribute("cart");
         if (cart == null) {
-            throw new IllegalStateException("Your cart not exists");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObjectDTO("NOT FOUND", "Not found cart", false));
         }
 
         if (!cart.containsKey(id))
-            throw new IllegalStateException("Not found product in cart");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObjectDTO("NOT FOUND", "Not found item in your cart", false));
         else cart.remove(id);
 
         session.setAttribute("cart", cart);
-        return true;
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObjectDTO("DELETED", "Deleted items", false));
     }
 
     @GetMapping(path = "/checkout")
-    public CartDTO checkout(HttpSession session) {
+    public ResponseEntity<ResponseObjectDTO> checkout(HttpSession session) {
         Map<Long, CartItemDTO> cart = (Map<Long, CartItemDTO>) session.getAttribute("cart");
         if (cart == null) {
-            cart = new HashMap<>();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObjectDTO("NOT FOUND", "Not found cart", false));
         }
 
         Cart cartEntity = new Cart();
@@ -138,9 +153,16 @@ public class CartController {
                     return cartItem;
                 })
                 .collect(Collectors.toList());
+
+        if (cartItems.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ResponseObjectDTO("FAILED", "Cart empty so cannot checkout", false));
+
         cartItemService.addAllItems(cartItems);
         cartEntity.setCartItems(cartItems);
         session.removeAttribute("cart");
-        return CartMapper.getInstance().toDTO(cartService.updateCart(cartEntity));
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObjectDTO("SUCCESSFUL", "Checkout successful",
+                        CartMapper.getInstance().toDTO(cartService.updateCart(cartEntity))));
     }
 }
