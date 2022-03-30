@@ -2,8 +2,14 @@ package com.quochao.demo.services;
 
 import com.quochao.demo.entities.Cart;
 
-public interface CartService {
-    Cart createCart(Cart cart);
+import java.util.List;
 
-    Cart updateCart(Cart cartEntity);
+public interface CartService {
+    Cart checkout(Cart cart);
+
+    List<Cart> findAll();
+
+    Cart findById(Long id);
+
+    Cart checkOrder(Long id);
 }

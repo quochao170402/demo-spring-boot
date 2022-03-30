@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface CartItemService {
     void addAllItems(List<CartItem> cartItems);
+
+    List<CartItem> findAllByCartId(Long id);
 }

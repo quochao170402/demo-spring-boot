@@ -11,17 +11,19 @@ public class CartDTO implements Serializable {
     private Integer quantity;
     private Double totalPrice;
     private LocalDate orderDate = LocalDate.now();
+    private Boolean state;
 
     public CartDTO() {
     }
 
-    public CartDTO(Long id, String name, List<CartItemDTO> cartItemDTOs, Integer quantity, Double totalPrice, LocalDate orderDate) {
+    public CartDTO(Long id, String name, List<CartItemDTO> cartItemDTOs, Integer quantity, Double totalPrice, LocalDate orderDate, Boolean state) {
         this.id = id;
         this.name = name;
         this.cartItemDTOs = cartItemDTOs;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
         this.orderDate = orderDate;
+        this.state = state;
     }
 
     public Long getId() {
@@ -70,5 +72,13 @@ public class CartDTO implements Serializable {
 
     public void setCartItemDTOs(List<CartItemDTO> cartItemDTOs) {
         this.cartItemDTOs = cartItemDTOs;
+    }
+
+    public Boolean getState() {
+        return state;
+    }
+
+    public void setState(Boolean state) {
+        this.state = state;
     }
 }

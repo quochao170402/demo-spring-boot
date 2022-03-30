@@ -25,7 +25,7 @@ public class CartItem implements Serializable {
     public CartItem() {
     }
 
-    public CartItem(Long id, Cart cart, Product product, Integer quantity, Double totalPrice) {
+    public CartItem(Long id,Cart cart, Product product, Integer quantity, Double totalPrice) {
         this.id = id;
         this.cart = cart;
         this.product = product;

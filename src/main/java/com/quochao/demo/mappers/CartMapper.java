@@ -22,6 +22,7 @@ public class CartMapper {
         dto.setTotalPrice(cart.getTotalPrice());
         dto.setCartItemDTOs(cart.getCartItems().stream().map(item -> CartItemMapper.getInstance().toDTO(item)).collect(Collectors.toList()));
         dto.setOrderDate(cart.getCreatedDate());
+        dto.setState(cart.getState());
         return dto;
     }
 }

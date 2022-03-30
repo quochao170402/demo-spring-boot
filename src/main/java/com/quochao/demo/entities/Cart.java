@@ -1,7 +1,6 @@
 package com.quochao.demo.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,21 +21,23 @@ public class Cart implements Serializable {
     private Double totalPrice;
     @Column(name = "created_date")
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate createdDate;
+    private LocalDate createdDate = LocalDate.now();
+    private Boolean state = false;
 
-    @OneToMany(mappedBy = "product")
-    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
+//    @JsonIgnore
     private List<CartItem> cartItems;
 
     public Cart() {
     }
 
-    public Cart(Long id, User user, Integer quantity, Double totalPrice, LocalDate createdDate) {
+    public Cart(Long id, User user, Integer quantity, Double totalPrice, LocalDate createdDate, Boolean state) {
         this.id = id;
         this.user = user;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
         this.createdDate = createdDate;
+        this.state = state;
     }
 
     public Long getId() {
@@ -85,6 +86,14 @@ public class Cart implements Serializable {
 
     public void setCartItems(List<CartItem> cartItems) {
         this.cartItems = cartItems;
+    }
+
+    public Boolean getState() {
+        return state;
+    }
+
+    public void setState(Boolean state) {
+        this.state = state;
     }
 
     @Override
