@@ -23,7 +23,7 @@ public class CartItemMapper {
 
     public CartItemDTO toDTO(CartItem cartItem){
         CartItemDTO dto = new CartItemDTO();
-        dto.setProductId(cartItem.getId());
+        dto.setProductId(cartItem.getProduct().getId());
         dto.setUnitPrice(cartItem.getProduct().getPrice());
         dto.setQuantity(cartItem.getQuantity());
         dto.setTotalPrice(cartItem.getTotalPrice());

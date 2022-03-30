@@ -3,6 +3,7 @@ package com.quochao.demo.services.impl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.quochao.demo.entities.Product;
+import com.quochao.demo.exceptions.ResourceNotFoundException;
 import com.quochao.demo.repositories.ProductRepository;
 import com.quochao.demo.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,6 +120,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> findAllByKeyWord(String keyword) {
         return productRepository.findAllByName(keyword);
+    }
+
+    @Override
+    @Transactional
+    public Product updateQuantityById(Long id, int quantity) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found product with id " + id));
+        product.setQuantity(product.getQuantity() - quantity);
+        return product;
     }
 
 

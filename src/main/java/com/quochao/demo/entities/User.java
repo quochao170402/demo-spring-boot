@@ -1,5 +1,7 @@
 package com.quochao.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -14,11 +16,11 @@ public class User implements Serializable {
     private String name;
     private String username;
     private String password;
-
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Cart> carts;
 
-    @ManyToOne
+    @ManyToOne()
     private Role role;
 
     public User() {

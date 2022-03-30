@@ -28,4 +28,6 @@ public interface ProductService {
     Product findById(Long id);
 
     List<Product> findAllByKeyWord(String keyword);
+
+    Product updateQuantityById(Long id, int quantity);
 }

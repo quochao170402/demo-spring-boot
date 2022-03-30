@@ -27,27 +27,31 @@ public class Product implements Serializable {
     private String name;
     private Double price;
     private String image;
+    private Integer quantity;
     @Transient
     @JsonIgnore
     private MultipartFile file;
 
     @OneToMany(mappedBy = "cart")
+    @JsonIgnore
     private List<CartItem> cartItems;
 
     public Product() {
     }
 
-    public Product(String name, Double price, String image) {
+    public Product(String name, Double price, String image, Integer quantity) {
         this.name = name;
         this.price = price;
         this.image = image;
+        this.quantity = quantity;
     }
 
-    public Product(Long id, String name, Double price, String image) {
+    public Product(Long id, String name, Double price, String image, Integer quantity) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.image = image;
+        this.quantity = quantity;
     }
 
     public MultipartFile getFile() {
@@ -94,6 +98,21 @@ public class Product implements Serializable {
         return LocalDate.now();
     }
 
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public List<CartItem> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
+    }
 
     @Override
     public String toString() {

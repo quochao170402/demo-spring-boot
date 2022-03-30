@@ -1,5 +1,7 @@
 package com.quochao.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -13,6 +15,7 @@ public class Role implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "role")
+    @JsonIgnore
     private Set<User> users;
 
     public Role() {

@@ -52,8 +52,10 @@ public class Config {
 
             studentRepository.saveAll(List.of(student1, student2, student3));
 
+            Random random = new Random();
             List<Product> products = IntStream.range(1, 50)
-                    .mapToObj(i -> new Product("product" + new Random().nextInt(100000), new Random().nextDouble(), "image" + new Random().nextInt(1000)))
+                    .mapToObj(i -> new Product("product" + random.nextInt(100000), random.nextDouble() * 100000,
+                            "image" + random.nextInt(1000), random.nextInt(1000)))
                     .collect(Collectors.toList());
             productRepository.saveAll(products);
 
@@ -74,7 +76,7 @@ public class Config {
             List<User> users3 = IntStream.range(21, 30)
                     .mapToObj(i -> new User("name" + i, "Username " + i, "password " + i, role3))
                     .collect(Collectors.toList());
-            
+
             userRepository.saveAll(users1);
             userRepository.saveAll(users2);
             userRepository.saveAll(users3);

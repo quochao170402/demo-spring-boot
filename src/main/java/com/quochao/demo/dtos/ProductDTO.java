@@ -6,14 +6,16 @@ public class ProductDTO implements Serializable {
     private Integer id;
     private String name;
     private Double price;
+    private Integer quantity;
 
     public ProductDTO() {
     }
 
-    public ProductDTO(Integer id, String name, Double price) {
+    public ProductDTO(Integer id, String name, Double price, Integer quantity) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.quantity = quantity;
     }
 
     public Integer getId() {
@@ -40,12 +42,21 @@ public class ProductDTO implements Serializable {
         this.price = price;
     }
 
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
     @Override
     public String toString() {
-        return "ProductDto{" +
+        return "ProductDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +
+                ", quantity=" + quantity +
                 '}';
     }
 }

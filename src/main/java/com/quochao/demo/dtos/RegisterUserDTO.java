@@ -1,21 +1,32 @@
 package com.quochao.demo.dtos;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 public class RegisterUserDTO implements Serializable {
+    @NotNull(message = "Name of user cannot be null")
     private String name;
+
+    @NotNull(message = "Username cannot not null")
+    @Size(min = 6, max = 30, message = "The username must be greater than 6 characters and less than 30 characters")
     private String username;
+
+    @NotNull(message = "Password cannot not null")
+    @Size(min = 6, max = 30, message = "The password must be greater than 6 characters and less than 30 characters")
     private String password;
+
     private Long roleId;
 
     public RegisterUserDTO() {
+        roleId = 1L;
     }
 
-    public RegisterUserDTO(String name, String username, String password, Long roleId) {
+    public RegisterUserDTO(String name, String username, String password) {
         this.name = name;
         this.username = username;
         this.password = password;
-        this.roleId = roleId;
+        this.roleId = 1L;
     }
 
     public String getName() {
